@@ -10,8 +10,8 @@ using PimV8.Models;
 namespace PimV8.Migrations
 {
     [DbContext(typeof(PersonDBContext))]
-    [Migration("20201026015959_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20201104023944_PersonDB")]
+    partial class PersonDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,6 +40,9 @@ namespace PimV8.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PersonId")
+                        .HasColumnType("int");
+
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(20)");
 
@@ -47,6 +50,8 @@ namespace PimV8.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
 
                     b.ToTable("Address");
                 });
@@ -58,25 +63,30 @@ namespace PimV8.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CPF")
-                        .HasColumnType("int");
+                    b.Property<long>("CPF")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<int?>("PhoneId")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.ToTable("Person");
+                });
+
+            modelBuilder.Entity("PimV8.Models.PersonPhone", b =>
+                {
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PhoneId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PersonId", "PhoneId");
 
                     b.HasIndex("PhoneId");
 
-                    b.ToTable("Person");
+                    b.ToTable("PersonPhones");
                 });
 
             modelBuilder.Entity("PimV8.Models.Phone", b =>
@@ -92,17 +102,12 @@ namespace PimV8.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TypeId");
 
                     b.ToTable("Phone");
                 });
 
-            modelBuilder.Entity("PimV8.Models.Type", b =>
+            modelBuilder.Entity("PimV8.Models.Tipo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -110,29 +115,48 @@ namespace PimV8.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PhoneId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Type");
+                    b.HasIndex("PhoneId")
+                        .IsUnique();
+
+                    b.ToTable("Tipo");
                 });
 
-            modelBuilder.Entity("PimV8.Models.Person", b =>
+            modelBuilder.Entity("PimV8.Models.Address", b =>
                 {
-                    b.HasOne("PimV8.Models.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId");
+                    b.HasOne("PimV8.Models.Person", null)
+                        .WithMany("Address")
+                        .HasForeignKey("PersonId");
+                });
+
+            modelBuilder.Entity("PimV8.Models.PersonPhone", b =>
+                {
+                    b.HasOne("PimV8.Models.Person", "Person")
+                        .WithMany("PersonPhones")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PimV8.Models.Phone", "Phone")
-                        .WithMany()
-                        .HasForeignKey("PhoneId");
+                        .WithMany("PersonPhones")
+                        .HasForeignKey("PhoneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("PimV8.Models.Phone", b =>
+            modelBuilder.Entity("PimV8.Models.Tipo", b =>
                 {
-                    b.HasOne("PimV8.Models.Type", "Type")
-                        .WithMany()
-                        .HasForeignKey("TypeId");
+                    b.HasOne("PimV8.Models.Phone", "Phone")
+                        .WithOne("Name")
+                        .HasForeignKey("PimV8.Models.Tipo", "PhoneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

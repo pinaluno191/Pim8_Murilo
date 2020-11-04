@@ -12,17 +12,22 @@ namespace PimV8.Models
     {
         [Key]
         public int Id { get; set; }
-        public int Number { get; set; }
-        public int DDD { get; set; }
-        public Type Type { get; set; }
-    }
 
-    public class Type
+        public int Number { get; set; }
+
+        public int DDD { get; set; }
+
+        public Tipo Name { get; set; }   
+        
+        public List<PersonPhone> PersonPhones { get; set; }
+
+    }
+    public class Tipo
     {
         [Key]
         public int Id { get; set; }
-
-        [Column(TypeName = "nvarchar(10)")]
         public string Name { get; set; }
+        public int PhoneId { get; set; }
+        public Phone Phone { get; set; }
     }
 }

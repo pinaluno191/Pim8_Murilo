@@ -12,7 +12,7 @@ namespace PimV8.Models
         [Key]
         public int Id { get; set; }
 
-        [Column(TypeName = "nvarchar(256)")]
+        [Column(TypeName = "nvarchar(256)")]        
         public string Street { get; set; }
 
         public int Number{ get; set; }
@@ -26,5 +26,7 @@ namespace PimV8.Models
 
         [Column(TypeName = "nvarchar(20)")]
         public string State{ get; set; }
+              
+        
     }
 }

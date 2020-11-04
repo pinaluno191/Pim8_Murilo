@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PimV8.Models;
 
 namespace PimV8.Migrations
 {
     [DbContext(typeof(PersonDBContext))]
-    partial class PersonDBContextModelSnapshot : ModelSnapshot
+    [Migration("20201104023128_CreatePersonDB")]
+    partial class CreatePersonDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

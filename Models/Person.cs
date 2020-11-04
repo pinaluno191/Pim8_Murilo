@@ -13,14 +13,15 @@ namespace PimV8.Models
         [Key]
         public int Id { get; set; }
 
-        [Column(TypeName = "nvarchar(256)")]
         public string Name { get; set; }
 
-        public int CPF { get; set; }
+        public long CPF { get; set; }
 
-        public Address Address { get; set; }
+        public  List<Address> Address { get; set; }       
 
-        public Phone Phone { get; set; }
+        public  List<PersonPhone> PersonPhones {get;set;}
+
+
         
 
     }
